@@ -11,55 +11,53 @@ import os
 import shutil
 import zipfile
 
+
 def main():
-    print('start')
-    clean_cache()
-    cache_zip('C:\\python_progs\\WincAcademy\\files\\data.zip','C:\\python_progs\\WincAcademy\\files\\cache')
-    list_of_files = cached_files()
-    print(find_password(list_of_files))
+    # here you can add commands for running standalone
+    pass
+
 
 def clean_cache():
-    print('cleaning cache')
-    print(os.getcwd())
-    if os.getcwd() == 'cache':
-        print('wrong dir, you are in cache!')       # just a check if program is stuck in cache dir
-    
-    if os.path.exists('cache'):                     # check if chache dir exists, if so, delete it
-        print('dir exists')
-        shutil.rmtree('cache')    
-    
-    os.mkdir('cache')                               # create a new cache directory
+    # this function will delete any files that are in
+    # the dir "cache" and creates an empty chache dir
+    os.chdir('C:\\python_progs\\WincAcademy\\files\\')
+    if os.path.exists('C:\\python_progs\\WincAcademy\\files\\cache'):
+        shutil.rmtree('C:\\python_progs\\WincAcademy\\files\\cache')
+
+    os.mkdir('C:\\python_progs\\WincAcademy\\files\\cache')
+
 
 def cache_zip(source, target):
-    print('unzip files')
-    clean_cache()                                   # clear cache folder just to make sure it will be empty
-    with zipfile.ZipFile(source,'r') as zipObj:     # extract the files
+    # extract the files
+    with zipfile.ZipFile(source, 'r') as zipObj:
         zipObj.extractall(target)
 
+
 def cached_files():
-    print('listing files')
-    os.chdir('C:\\python_progs\\WincAcademy\\files\\cache') #to make sure that we are listing the correct folder
-    file_list = []
+    # fuction will return a list of files in the cache dir
+    os.chdir('C:\\python_progs\\WincAcademy\\files\\cache')
     for root, dirs, files in os.walk('.'):
-        #file_list = [os.path.abspath(name) for name in files] #list comprehension eruit gehaald, wellicht dat dit roet in het eten gooit bij wincpy check?
-        for name in files:
-            file_list.append(os.path.abspath(name))
-    print(file_list[0:2])
+        file_list = [os.path.abspath(name) for name in files]
+
     return file_list
 
+
 def find_password(file_list):
-    print('finding password')
-    print('where are we looking for password?',os.getcwd())
+    # function will search for the word
+    # "password" in the file list and
+    # returns the word that follows on password: ....
     for file in file_list:
         with open(file) as f:
             content = f.read().lower().splitlines()
+            f.close()
             for lines in content:
                 if 'password' in lines:
-                    print(lines)
                     password = lines.split(': ')[1]
+                    os.chdir('C:\\python_progs\\WincAcademy\\files\\')
                     return password
 
     print('password not found')
+
 
 if __name__ == '__main__':
     main()
