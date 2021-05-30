@@ -12,19 +12,18 @@ import shutil
 import zipfile
 
 
-def main():
-    # here you can add commands for running standalone
-    pass
+main_path = os.path.dirname(os.path.realpath(__file__))
+cache_path = str(main_path) + '\\cache'
 
 
 def clean_cache():
     # this function will delete any files that are in
     # the dir "cache" and creates an empty chache dir
-    os.chdir('C:\\python_progs\\WincAcademy\\files\\')
-    if os.path.exists('C:\\python_progs\\WincAcademy\\files\\cache'):
-        shutil.rmtree('C:\\python_progs\\WincAcademy\\files\\cache')
+    os.chdir(main_path)
+    if os.path.exists(cache_path):
+        shutil.rmtree(cache_path)
 
-    os.mkdir('C:\\python_progs\\WincAcademy\\files\\cache')
+    os.mkdir(cache_path)
 
 
 def cache_zip(source, target):
@@ -35,7 +34,7 @@ def cache_zip(source, target):
 
 def cached_files():
     # fuction will return a list of files in the cache dir
-    os.chdir('C:\\python_progs\\WincAcademy\\files\\cache')
+    os.chdir(cache_path)
     for root, dirs, files in os.walk('.'):
         file_list = [os.path.abspath(name) for name in files]
 
@@ -49,15 +48,10 @@ def find_password(file_list):
     for file in file_list:
         with open(file) as f:
             content = f.read().lower().splitlines()
-            f.close()
-            for lines in content:
-                if 'password' in lines:
-                    password = lines.split(': ')[1]
-                    os.chdir('C:\\python_progs\\WincAcademy\\files\\')
+            for line in content:
+                if 'password' in line:
+                    password = line.split(': ')[1]
+                    os.chdir(main_path)  #@ Thomas --> deze is wel degelijk noodzakelijk, anders werkt de laatste functie van wincpy check niet: https://winc-campus.slack.com/archives/C01SYQNPJD8/p1621938185196900
                     return password
 
     print('password not found')
-
-
-if __name__ == '__main__':
-    main()
