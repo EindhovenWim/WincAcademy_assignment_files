@@ -13,8 +13,7 @@ import zipfile
 
 
 main_path = os.path.dirname(os.path.realpath(__file__))
-cache_path = str(main_path) + '\\cache'
-
+cache_path = os.path.join(main_path, 'cache')
 
 def clean_cache():
     # this function will delete any files that are in
